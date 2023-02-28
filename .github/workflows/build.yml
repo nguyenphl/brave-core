@@ -26,13 +26,13 @@ jobs:
       # arch: []
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-vm
             arch: ia32
-          - os: windows-latest
+          - os: windows-vm
             arch: x64
-          - os: linux-latest
+          - os: linux-vm
             arch: amd64
-          - os: linux-latest
+          - os: linux-vm
             arch: arm64
           # - os: android-vm
           #   arch: arm
