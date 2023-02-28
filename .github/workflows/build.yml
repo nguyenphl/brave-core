@@ -1,0 +1,69 @@
+name: "Build"
+
+# on: 
+#   push:
+#     branches: 
+#       - main
+#     paths-ignore:
+#       - '**/*.md'
+#       - '**/*.gitignore'
+#       - '**/*.gitattributes'
+  
+#   workflow_dispatch:
+#     branches:
+#       - main
+#     paths-ignore:
+#       - '**/*.md'
+#       - '**/*.gitignore'
+#       - '**/*.gitattributes'
+
+on: push
+
+jobs:
+  build:
+    strategy:
+      # os: []
+      # arch: []
+      matrix:
+        include:
+          - os: windows-latest
+            arch: ia32
+          - os: windows-latest
+            arch: x64
+          - os: linux-latest
+            arch: amd64
+          - os: linux-latest
+            arch: arm64
+          # - os: android-vm
+          #   arch: arm
+        
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      
+      - name: pull
+        run: git pull
+
+      - name: init
+        run: npm run init
+
+      - name: sync
+        run: npm run sync
+
+      - name: build
+        run: npm run build Release
+
+  # test:
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+
+  # create_dist:
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
