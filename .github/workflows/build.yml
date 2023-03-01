@@ -69,12 +69,13 @@ jobs:
       - name: checkout master
         uses: actions/checkout@v3
         with:
-          repository: 'https://github.com/nguyenphl/brave-core'
+          repository: 'nguyenphl/brave-core'
           ref: 'master'
       - name: pull new source
         run: git pull
 
       - name: update version
+        id: update_version
         shell: bash
         run: |
           file_path="package.json"
@@ -86,14 +87,12 @@ jobs:
           new_last_part=$((last_part+1))
 
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
-          echo new_version > output.log
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
-      - name: Upload version file
-        uses: actions/upload-artifact@v3
-        with:
-          name: output-log-file
-          path: output.log
+          echo "::set-output name=new_version::$new_version"
+
+      - name: ${{steps.update_version.outputs.new_version}}
+        run: echo ${{steps.update_version.outputs.new_version}}
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
