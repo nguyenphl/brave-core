@@ -48,15 +48,15 @@ jobs:
           echo ("version=" + new_version >> $env:GITHUB_ENV
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
-      - name: commit change
-        uses: devops-infra/action-commit-push@master
-        with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}"
-          add_timestamp: true
-          commit_prefix: "[AUTO]"
-          commit_message: ${{ env.version }}
-          force: false
-          target_branch: master
+      # - name: commit change
+      #   uses: devops-infra/action-commit-push@master
+      #   with:
+      #     github_token: "${{ secrets.GITHUB_TOKEN }}"
+      #     add_timestamp: true
+      #     commit_prefix: "[AUTO]"
+      #     commit_message: ${{ env.version }}
+      #     force: false
+      #     target_branch: master
 
   increase-core-version:
     runs-on: linux-vm
@@ -83,15 +83,15 @@ jobs:
           echo ("version=" + new_version >> $env:GITHUB_ENV
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
-      - name: commit change
-        uses: devops-infra/action-commit-push@master
-        with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}"
-          add_timestamp: true
-          commit_prefix: "[AUTO]"
-          commit_message: ${{ env.version }}
-          force: false
-          target_branch: master
+      # - name: commit change
+      #   uses: devops-infra/action-commit-push@master
+      #   with:
+      #     github_token: "${{ secrets.GITHUB_TOKEN }}"
+      #     add_timestamp: true
+      #     commit_prefix: "[AUTO]"
+      #     commit_message: ${{ env.version }}
+      #     force: false
+      #     target_branch: master
       
   # build:
   #   strategy:
