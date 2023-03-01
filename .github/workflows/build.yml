@@ -19,7 +19,7 @@ name: "Build"
 
 on: 
   schedule:
-    - cron: '0/1 * * * *' 
+    - cron: '*/1 * * * *' 
 
 jobs:
   increase-browser-version:
