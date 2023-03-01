@@ -35,6 +35,7 @@ jobs:
         run: git pull
 
       - name: update version
+        shell: bash
         run: |
           file_path="package.json"
           version=$(jq -r '.version' $file_path)
@@ -70,6 +71,7 @@ jobs:
         run: git pull
 
       - name: update version
+        shell: bash
         run: |
           file_path="package.json"
           version=$(jq -r '.version' $file_path)
