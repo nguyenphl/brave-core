@@ -75,13 +75,10 @@ jobs:
     needs: increase-browser-version
     runs-on: linux-vm
     steps:
-      - name: init directory
-        run: mkdir -p ../../brave-core
-
       - name: checkout master
         working-directory: ../../brave-core
         run: |
-          git clone https://github.com/nguyenphl/brave-core
+          git clone https://github.com/nguyenphl/brave-core ../../brave-core
           git config --global --add safe.directory .
           git config --local --get remote.origin.url
           git checkout master
