@@ -81,15 +81,17 @@ jobs:
       - name: checkout master
         working-directory: ../../
         run: |
-          ls
-          rm -rf ./brave-core
-          git clone https://github.com/nguyenphl/brave-core 
-          cd brave-core
-          git config --global --add safe.directory .
-          git config --local --get remote.origin.url
-          git checkout master
-          git pull origin
-          
+          if [ ! -d ./brave-core/.git ]
+          then
+              git clone https://github.com/nguyenphl/brave-core 
+              cd brave-core
+              git config --global --add safe.directory .
+              git config --local --get remote.origin.url
+              git checkout master
+          else
+              cd brave-core
+              git pull origin
+          fi
 
       - name: reset working space
         working-directory: ../../brave-core
@@ -144,17 +146,21 @@ jobs:
         working-directory: ../../brave-core
         run: git status
 
-      - name: change working dir
-        run: cd ../../brave-core 
-
       - name: Commit & Push changes
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          author_email: herond-builds@herondlabs.org
-          author_name: herond-builds
-          message: ${{env.new_version}}
-          branch: master
+        run: |
+          cd ../../brave-core 
+          git config --global user.email "herond-builds@herondlabs.org"
+          git config --global user.name "herond-builds"
+          git add .
+          git commit -m ${{env.new_version}}
+          git push origin
+        # uses: actions-js/push@master
+        # with:
+        #   github_token: ${{ secrets.GITHUB_TOKEN }}
+        #   author_email: herond-builds@herondlabs.org
+        #   author_name: herond-builds
+        #   message: ${{env.new_version}}
+        #   branch: master
 
 
       
