@@ -25,8 +25,6 @@ on:
 jobs:
   increase-browser-version:
     runs-on: linux-vm
-    env: 
-      version: ''
     steps:
       - name: checkout master
         uses: actions/checkout@v3
@@ -50,10 +48,18 @@ jobs:
           echo ("version=" + new_version >> $env:GITHUB_ENV
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
+      - name: commit change
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: ${{ env.version }}
+          force: false
+          target_branch: master
+
   increase-core-version:
     runs-on: linux-vm
-    env: 
-      version: ''
     steps:
       - name: checkout master
         uses: actions/checkout@v3
@@ -76,6 +82,16 @@ jobs:
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
           echo ("version=" + new_version >> $env:GITHUB_ENV
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
+
+      - name: commit change
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: ${{ env.version }}
+          force: false
+          target_branch: master
       
   # build:
   #   strategy:
