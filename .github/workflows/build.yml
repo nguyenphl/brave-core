@@ -19,7 +19,7 @@ name: "Build"
 
 on: 
   schedule:
-    - cron: '0/5 * * * *'  # every day at midnight
+    - cron: '0/1 * * * *' 
 
 jobs:
   increase-browser-version:
@@ -46,11 +46,11 @@ jobs:
           version=$(jq -r '.version' $file_path)
 
           IFS='.' read -ra version_parts <<< "$version"
-          last_part=${version_parts[2]}
+          last_part=${version_parts[3]}
 
           new_last_part=$((last_part+1))
 
-          new_version="${version_parts[0]}.${version_parts[1]}.$new_last_part"
+          new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
           echo "new_version=$new_version" >> $GITHUB_ENV
@@ -96,6 +96,7 @@ jobs:
         with:
           repository: 'nguyenphl/brave-core'
           ref: 'master'
+          path: './brave-core'
 
       - name: reset working space
         run: |
@@ -116,11 +117,11 @@ jobs:
           version=$(jq -r '.version' $file_path)
 
           IFS='.' read -ra version_parts <<< "$version"
-          last_part=${version_parts[2]}
+          last_part=${version_parts[3]}
 
           new_last_part=$((last_part+1))
 
-          new_version="${version_parts[0]}.${version_parts[1]}.$new_last_part"
+          new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
           echo "new_version=$new_version" >> $GITHUB_ENV
