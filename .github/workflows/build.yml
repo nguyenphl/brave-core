@@ -61,6 +61,12 @@ jobs:
 
       - name: show change
         run: git status
+
+      - name: commit change
+        run: |
+          git add *
+          git commit -m ${{env.new_version}}
+          git push
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
@@ -128,6 +134,12 @@ jobs:
         
       - name: show change
         run: git status
+
+      - name: commit change
+        run: |
+          git add *
+          git commit -m ${{env.new_version}}
+          git push
 
       
 
