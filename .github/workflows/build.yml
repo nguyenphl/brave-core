@@ -66,9 +66,11 @@ jobs:
       - name: show change
         working-directory: ../brave-core
         run: git status
-        
+
+      - name: change working dir
+        run: cd ../brave-core 
+
       - name: Commit & Push changes
-        working-directory: ../brave-core
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
