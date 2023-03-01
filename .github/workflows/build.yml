@@ -52,6 +52,7 @@ jobs:
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
       
       - name: ${{ env.new_version }}
+        run: echo ${{ env.new_version }}
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
