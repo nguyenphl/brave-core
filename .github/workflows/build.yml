@@ -18,6 +18,7 @@ name: "Build"
 #       - '**/*.gitattributes'
 
 on: 
+  push:
   schedule:
     - cron: '*/5 * * * *' 
 
