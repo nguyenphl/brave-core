@@ -97,7 +97,7 @@ jobs:
         with:
           repository: 'nguyenphl/brave-core'
           ref: 'master'
-          path: './brave-core'
+          path: '../brave-core'
 
       - name: reset working space
         working-directory: ../brave-core
