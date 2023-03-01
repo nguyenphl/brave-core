@@ -113,14 +113,17 @@ jobs:
 
       - name: change chromium version
         run: |
-          # Read the current value of PATCH
-          PATCH=$(grep -oP '(?<=PATCH=)\d+' ./patches/chrome-VERSION.patch)
+          # Read the current patch version from the patch file
+          patch=$(grep "^+PATCH=" chrome-VERSION.patch | cut -d "=" -f 2)
 
-          # Increment the value of PATCH
-          PATCH=$((PATCH + 1))
+          # Convert the patch version to an integer
+          patch=$(($patch))
 
-          # Replace the old value of PATCH with the new value in the file
-          sed -i "s/PATCH=$((PATCH - 1))/PATCH=$PATCH/" ./patches/chrome-VERSION.patch
+          # Increment the patch version by 1
+          patch=$(($patch + 1))
+
+          # Replace the old patch version with the new one
+          sed -i "s/^+PATCH=[0-9]*/+PATCH=$patch/" chrome-VERSION.patch
         
       - name: show change
         run: git status
