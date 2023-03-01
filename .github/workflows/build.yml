@@ -91,29 +91,29 @@ jobs:
   increase-core-version:
     needs: increase-browser-version
     runs-on: linux-vm
+    defaults:
+      run:
+        working-directory: ../../brave-core
     steps:
       - name: checkout master
         uses: actions/checkout@v3
         with:
           repository: 'nguyenphl/brave-core'
           ref: 'master'
-          path: '../brave-core'
+          path: '../../brave-core'
 
       - name: reset working space
-        working-directory: ../brave-core
         run: |
           git restore *
           git reset
       
       - name: pull new source
-        working-directory: ../brave-core
         run: git pull origin
 
       - name: get current version
         run: ls ../
 
       - name: update version
-        working-directory: ../brave-core
         id: update_version
         shell: bash
         run: |
@@ -134,7 +134,6 @@ jobs:
         run: echo ${{env.new_version}}
 
       - name: change chromium version
-        working-directory: ../brave-core
         run: |
           # Read the current patch version from the patch file
           patch=$(grep "^+PATCH=" ./patches/chrome-VERSION.patch | cut -d "=" -f 2)
@@ -149,11 +148,10 @@ jobs:
           sed -i "s/^+PATCH=[0-9]*/+PATCH=$patch/" ./patches/chrome-VERSION.patch
         
       - name: show change
-        working-directory: ../brave-core
         run: git status
 
-      - name: change working dir
-        run: cd ../brave-core 
+      # - name: change working dir
+      #   run: cd ../brave-core 
 
       - name: Commit & Push changes
         uses: actions-js/push@master
