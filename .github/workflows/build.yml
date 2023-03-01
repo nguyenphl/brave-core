@@ -66,7 +66,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           author_email: herond-builds@herondlabs.org
-          author_name: erond-builds
+          author_name: herond-builds
           message: ${{env.new_version}}
           branch: master
       # - name: commit change
@@ -116,11 +116,11 @@ jobs:
           version=$(jq -r '.version' $file_path)
 
           IFS='.' read -ra version_parts <<< "$version"
-          last_part=${version_parts[3]}
+          last_part=${version_parts[2]}
 
           new_last_part=$((last_part+1))
 
-          new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
+          new_version="${version_parts[0]}.${version_parts[1]}.$new_last_part"
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
           echo "new_version=$new_version" >> $GITHUB_ENV
@@ -155,7 +155,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           author_email: herond-builds@herondlabs.org
-          author_name: erond-builds
+          author_name: herond-builds
           message: ${{env.new_version}}
           branch: master
 
