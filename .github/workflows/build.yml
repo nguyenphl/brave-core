@@ -64,7 +64,7 @@ jobs:
 
       - name: commit change
         run: |
-          git add *
+          git add package.json
           git commit -m ${{env.new_version}}
           git push
       # - name: commit change
@@ -137,7 +137,8 @@ jobs:
 
       - name: commit change
         run: |
-          git add *
+          git add package.json
+          git add ./patches/chrome-VERSION.patch
           git commit -m ${{env.new_version}}
           git push
 
