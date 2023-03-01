@@ -30,21 +30,17 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'master'
-          path: '../brave-core'
       
       - name: reset working space
-        working-directory: ../brave-core
         run: |
           git restore *
           git reset
           
       - name: pull new source
-        working-directory: ../brave-core
         run: git pull
 
       - name: update version
         shell: bash
-        working-directory: ../brave-core
         id: update_version
         run: |
           file_path="package.json"
@@ -66,9 +62,6 @@ jobs:
       - name: show change
         working-directory: ../brave-core
         run: git status
-
-      - name: change working dir
-        run: cd ../brave-core 
 
       - name: Commit & Push changes
         uses: actions-js/push@master
@@ -108,17 +101,20 @@ jobs:
           path: './brave-core'
 
       - name: reset working space
+        working-directory: ../brave-core
         run: |
           git restore *
           git reset
       
       - name: pull new source
+        working-directory: ../brave-core
         run: git pull origin
 
       - name: get current version
         run: ls ../
 
       - name: update version
+        working-directory: ../brave-core
         id: update_version
         shell: bash
         run: |
@@ -139,6 +135,7 @@ jobs:
         run: echo ${{env.new_version}}
 
       - name: change chromium version
+        working-directory: ../brave-core
         run: |
           # Read the current patch version from the patch file
           patch=$(grep "^+PATCH=" ./patches/chrome-VERSION.patch | cut -d "=" -f 2)
@@ -153,7 +150,11 @@ jobs:
           sed -i "s/^+PATCH=[0-9]*/+PATCH=$patch/" ./patches/chrome-VERSION.patch
         
       - name: show change
+        working-directory: ../brave-core
         run: git status
+
+      - name: change working dir
+        run: cd ../brave-core 
 
       - name: Commit & Push changes
         uses: actions-js/push@master
