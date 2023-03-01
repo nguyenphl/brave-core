@@ -76,7 +76,7 @@ jobs:
     runs-on: linux-vm
     steps:
       - name: init directory
-        run: mkdir ../../brave-core
+        run: mkdir -p ../../brave-core
 
       - name: checkout master
         working-directory: ../../brave-core
