@@ -30,6 +30,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'master'
+      
+      - name: reset working space
+        run: |
+          git restore *
+          git reset
           
       - name: pull new source
         run: git pull
@@ -51,8 +56,11 @@ jobs:
 
           echo "::set-output name=new_version::$new_version"
       
-      - name: ${{steps.update_version.outputs.new_version}}
+      - name: updated to version ${{steps.update_version.outputs.new_version}}
         run: echo ${{steps.update_version.outputs.new_version}}
+
+      - name: show change
+        run: git status
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
@@ -71,8 +79,17 @@ jobs:
         with:
           repository: 'nguyenphl/brave-core'
           ref: 'master'
+
+      - name: reset working space
+        run: |
+          git restore *
+          git reset
+      
       - name: pull new source
         run: git pull
+
+      - name: get current version
+        run: ls ../
 
       - name: update version
         id: update_version
@@ -91,18 +108,25 @@ jobs:
 
           echo "::set-output name=new_version::$new_version"
 
-      - name: ${{steps.update_version.outputs.new_version}}
+      - name: updated to version ${{steps.update_version.outputs.new_version}}
         run: echo ${{steps.update_version.outputs.new_version}}
-      # - name: commit change
-      #   uses: devops-infra/action-commit-push@master
-      #   with:
-      #     github_token: "${{ secrets.GITHUB_TOKEN }}"
-      #     add_timestamp: true
-      #     commit_prefix: "[AUTO]"
-      #     commit_message: ${{ env.version }}
-      #     force: false
-      #     target_branch: master
+
+      - name: change chromium version
+        run: |
+          # Read the current value of PATCH
+          PATCH=$(grep -oP '(?<=PATCH=)\d+' ./patches/chrome-VERSION.patch)
+
+          # Increment the value of PATCH
+          PATCH=$((PATCH + 1))
+
+          # Replace the old value of PATCH with the new value in the file
+          sed -i "s/PATCH=$((PATCH - 1))/PATCH=$PATCH/" ./patches/chrome-VERSION.patch
+        
+      - name: show change
+        run: git status
+
       
+
   # build:
   #   strategy:
   #     # os: []
