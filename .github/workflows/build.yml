@@ -38,7 +38,7 @@ jobs:
 
       - name: update version
         run: |
-          file_path="your_file_path.json"
+          file_path="package.json"
           version=$(jq -r '.version' $file_path)
 
           IFS='.' read -ra version_parts <<< "$version"
@@ -65,7 +65,7 @@ jobs:
 
       - name: update version
         run: |
-          file_path="your_file_path.json"
+          file_path="package.json"
           version=$(jq -r '.version' $file_path)
 
           IFS='.' read -ra version_parts <<< "$version"
