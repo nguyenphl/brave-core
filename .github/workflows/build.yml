@@ -25,8 +25,6 @@ on:
 jobs:
   increase-browser-version:
     runs-on: linux-vm
-    env:
-      updated_version: ''
     steps:
       - name: checkout master
         uses: actions/checkout@v3
@@ -38,6 +36,7 @@ jobs:
 
       - name: update version
         shell: bash
+        id: update_version
         run: |
           file_path="package.json"
           version=$(jq -r '.version' $file_path)
@@ -48,11 +47,12 @@ jobs:
           new_last_part=$((last_part+1))
 
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
-          process.env.new_version = $new_version;
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
+
+          echo "::set-output name=new_version::$new_version"
       
-      - name: ${{ env.new_version }}
-        run: echo ${{ env.new_version }}
+      - name: ${{steps.update_version.outputs.new_version}}
+        run: echo ${{steps.update_version.outputs.new_version}}
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
