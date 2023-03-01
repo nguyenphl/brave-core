@@ -20,7 +20,7 @@ name: "Build"
 on: 
   push:
   schedule:
-    - cron: '*/5 * * * *' 
+    - cron: '*/1 * * * *' 
 
 jobs:
   increase-browser-version:
