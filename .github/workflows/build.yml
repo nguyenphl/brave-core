@@ -25,6 +25,8 @@ on:
 jobs:
   increase-browser-version:
     runs-on: linux-vm
+    env:
+      updated_version: ''
     steps:
       - name: checkout master
         uses: actions/checkout@v3
@@ -46,9 +48,10 @@ jobs:
           new_last_part=$((last_part+1))
 
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
-          echo ("version=" + new_version >> $env:GITHUB_ENV
+          process.env.new_version = $new_version;
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
-
+      
+      - name: ${{ env.new_version }}
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
@@ -82,9 +85,14 @@ jobs:
           new_last_part=$((last_part+1))
 
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
-          echo ("version=" + new_version >> $env:GITHUB_ENV
+          echo new_version > output.log
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
+      - name: Upload version file
+        uses: actions/upload-artifact@v3
+        with:
+          name: output-log-file
+          path: output.log
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
