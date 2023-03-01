@@ -168,7 +168,7 @@ jobs:
         #   git push origin --verbose
         uses: actions-js/push@master
         with:
-          repository: https://github.com/nguyenphl/brave-core
+          repository: nguyenphl/brave-core
           github_token: ${{ secrets.GITHUB_TOKEN }}
           author_email: herond-builds@herondlabs.org
           author_name: herond-builds
