@@ -147,8 +147,8 @@ jobs:
         run: git status
 
       - name: Commit & Push changes
+        working-directory: ../../brave-core
         run: |
-          cd ../../brave-core 
           git config --global user.email "herond-builds@herondlabs.org"
           git config --global user.name "herond-builds"
           git add .
