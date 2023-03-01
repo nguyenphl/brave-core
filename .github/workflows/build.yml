@@ -169,7 +169,7 @@ jobs:
         uses: actions-js/push@master
         with:
           repository: nguyenphl/brave-core
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.CORE_TOKEN }}
           author_email: herond-builds@herondlabs.org
           author_name: herond-builds
           message: ${{env.new_version}}
