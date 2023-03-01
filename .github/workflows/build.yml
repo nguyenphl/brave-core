@@ -96,11 +96,13 @@ jobs:
         working-directory: ../../brave-core
     steps:
       - name: checkout master
-        uses: actions/checkout@v3
-        with:
-          repository: 'nguyenphl/brave-core'
-          ref: 'master'
-          path: '../../brave-core'
+        run: |
+          git clone https://github.com/nguyenphl/brave-core
+          git config --global --add safe.directory .
+          git config --local --get remote.origin.url
+          git checkout master
+          git pull origin
+          
 
       - name: reset working space
         run: |
