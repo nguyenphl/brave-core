@@ -66,6 +66,7 @@ jobs:
         run: |
           git config user.email "herond-builds@herondlabs.com"
           git config user.name "herond-builds"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git add package.json
           git commit -m ${{env.new_version}}
           git push
@@ -141,6 +142,7 @@ jobs:
         run: |
           git config user.email "herond-builds@herondlabs.com"
           git config user.name "herond-builds"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git add package.json
           git add ./patches/chrome-VERSION.patch
           git commit -m ${{env.new_version}}
