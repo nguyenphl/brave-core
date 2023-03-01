@@ -146,13 +146,25 @@ jobs:
         working-directory: ../../brave-core
         run: git status
 
-      - name: Commit & Push changes
+      - name: set author
         working-directory: ../../brave-core
         run: |
           git config --global user.email "herond-builds@herondlabs.org"
           git config --global user.name "herond-builds"
+
+      - name: add files
+        working-directory: ../../brave-core
+        run: |
           git add .
+
+      - name: commit
+        working-directory: ../../brave-core
+        run: |
           git commit -m ${{env.new_version}}
+
+      - name: push
+        working-directory: ../../brave-core
+        run: |
           git push origin
         # uses: actions-js/push@master
         # with:
