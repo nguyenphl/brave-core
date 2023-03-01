@@ -54,10 +54,10 @@ jobs:
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
-          echo "::set-output name=new_version::$new_version"
+          echo "new_version=$new_version" >> $GITHUB_ENV
       
-      - name: updated to version ${{steps.update_version.outputs.new_version}}
-        run: echo ${{steps.update_version.outputs.new_version}}
+      - name: updated to version ${{env.new_version}}
+        run: echo ${{env.new_version}}
 
       - name: show change
         run: git status
@@ -107,10 +107,10 @@ jobs:
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
           jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
 
-          echo "::set-output name=new_version::$new_version"
+          echo "new_version=$new_version" >> $GITHUB_ENV
 
-      - name: updated to version ${{steps.update_version.outputs.new_version}}
-        run: echo ${{steps.update_version.outputs.new_version}}
+      - name: updated to version ${{env.new_version}}
+        run: echo ${{env.new_version}}
 
       - name: change chromium version
         run: |
