@@ -37,7 +37,6 @@ jobs:
         run: git pull
 
       - name: update version
-        script: bash
         run: |
           file_path="your_file_path.json"
           version=$(jq -r '.version' $file_path)
