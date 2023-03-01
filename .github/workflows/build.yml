@@ -79,9 +79,11 @@ jobs:
         run: mkdir -p ../../brave-core
 
       - name: checkout master
-        working-directory: ../../brave-core
+        working-directory: ../../
         run: |
-          git clone https://github.com/nguyenphl/brave-core ../../
+          ls
+          rm -rf ./brave-core
+          git clone https://github.com/nguyenphl/brave-core 
           git config --global --add safe.directory .
           git config --local --get remote.origin.url
           git checkout master
