@@ -61,15 +61,23 @@ jobs:
 
       - name: show change
         run: git status
-
-      - name: commit change
-        run: |
-          git config user.email "herond-builds@herondlabs.com"
-          git config user.name "herond-builds"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git add package.json
-          git commit -m ${{env.new_version}}
-          git push
+        
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          author_email: herond-builds@herondlabs.org
+          author_name: erond-builds
+          message: ${{env.new_version}}
+          branch: master
+      # - name: commit change
+      #   run: |
+      #     git config user.email "herond-builds@herondlabs.com"
+      #     git config user.name "herond-builds"
+      #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+      #     git add package.json
+      #     git commit -m ${{env.new_version}}
+      #     git push
       # - name: commit change
       #   uses: devops-infra/action-commit-push@master
       #   with:
@@ -138,15 +146,24 @@ jobs:
       - name: show change
         run: git status
 
-      - name: commit change
-        run: |
-          git config user.email "herond-builds@herondlabs.com"
-          git config user.name "herond-builds"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git add package.json
-          git add ./patches/chrome-VERSION.patch
-          git commit -m ${{env.new_version}}
-          git push
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          author_email: herond-builds@herondlabs.org
+          author_name: erond-builds
+          message: ${{env.new_version}}
+          branch: master
+
+      # - name: commit change
+      #   run: |
+      #     git config user.email "herond-builds@herondlabs.com"
+      #     git config user.name "herond-builds"
+      #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+      #     git add package.json
+      #     git add ./patches/chrome-VERSION.patch
+      #     git commit -m ${{env.new_version}}
+      #     git push
 
       
 
