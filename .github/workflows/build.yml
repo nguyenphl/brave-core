@@ -17,45 +17,123 @@ name: "Build"
 #       - '**/*.gitignore'
 #       - '**/*.gitattributes'
 
-on: push
+on: 
+  push:
+  schedule:
+    - cron: '0/5 * * * *'  # every day at midnight
 
 jobs:
-  build:
-    strategy:
-      # os: []
-      # arch: []
-      matrix:
-        include:
-          - os: windows-vm
-            arch: ia32
-          - os: windows-vm
-            arch: x64
-          - os: linux-vm
-            arch: amd64
-          - os: linux-vm
-            arch: arm64
-          # - os: android-vm
-          #   arch: arm
-        
-    runs-on: ${{ matrix.os }}
+  increase-browser-version:
+    runs-on: linux-vm
+    env: 
+      version: ''
     steps:
-      - name: checkout
+      - name: checkout master
         uses: actions/checkout@v3
-
-      - name: pull
+        with:
+          ref: 'master'
+          
+      - name: pull new source
         run: git pull
 
-      - name: install deps
-        run: npm i
+      - name: update version
+        script: bash
+        run: |
+          file_path="your_file_path.json"
+          version=$(jq -r '.version' $file_path)
 
-      - name: init
-        run: npm run init --target_arch=${{ matrix.arch }}
+          IFS='.' read -ra version_parts <<< "$version"
+          last_part=${version_parts[3]}
 
-      - name: sync
-        run: npm run sync
+          new_last_part=$((last_part+1))
 
-      - name: build
-        run: npm run build Release --target_arch=${{ matrix.arch }}
+          new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
+          echo ("version=" + new_version >> $env:GITHUB_ENV
+          jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
+
+      - name: commit change
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: ${{ env.version }}
+          force: false
+          target_branch: master
+
+  increase-core-version:
+    runs-on: linux-vm
+    env: 
+      version: ''
+    steps:
+      - name: checkout master
+        uses: actions/checkout@v3
+        with:
+          repository: 'https://github.com/nguyenphl/brave-core'
+          ref: 'master'
+      - name: pull new source
+        run: git pull
+
+      - name: update version
+        script: bash
+        run: |
+          file_path="your_file_path.json"
+          version=$(jq -r '.version' $file_path)
+
+          IFS='.' read -ra version_parts <<< "$version"
+          last_part=${version_parts[3]}
+
+          new_last_part=$((last_part+1))
+
+          new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}.$new_last_part"
+          echo ("version=" + new_version >> $env:GITHUB_ENV
+          jq --arg new_version "$new_version" '.version = $new_version' $file_path > tmp.json && mv tmp.json $file_path
+
+      - name: commit change
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: ${{ env.version }}
+          force: false
+          target_branch: master
+      
+  # build:
+  #   strategy:
+  #     # os: []
+  #     # arch: []
+  #     matrix:
+  #       include:
+  #         # - os: windows-vm
+  #         #   arch: ia32
+  #         # - os: windows-vm
+  #         #   arch: x64
+  #         - os: linux-vm
+  #           arch: amd64
+  #         # - os: linux-vm
+  #         #   arch: arm64
+  #         # - os: android-vm
+  #         #   arch: arm
+        
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: checkout master
+  #       uses: actions/checkout@v3
+  #       with:
+  #         ref: 'master'
+
+  #     - name: pull new source
+  #       run: git pull
+
+  #     - name: install deps
+  #       run: npm i
+
+  #     - name: init
+  #       run: npm run init --target_arch=${{ matrix.arch }}
+
+  #     - name: build
+  #       run: npm run build Release --target_arch=${{ matrix.arch }}
 
   # test:
   #   strategy:
