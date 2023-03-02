@@ -21,7 +21,6 @@ jobs:
               git config --local --get remote.origin.url
               git checkout master
           else
-              cd brave-browser
               git pull origin
           fi
       
