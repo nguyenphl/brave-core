@@ -16,14 +16,16 @@ jobs:
               cd ..
               rm -rf brave-browser
               git clone https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
+              git remote set-url origin https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
               cd brave-browser
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
               git checkout master
-              git pull origin
+              git pull
           else
+              git remote set-url origin https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
               git checkout master
-              git pull origin
+              git pull
           fi
       
       - name: Reset working space
