@@ -3,7 +3,7 @@ name: "Bump Version"
 on: 
   workflow_dispatch:
   schedule:
-    - cron: '*/1 * * * *' 
+    - cron: '1 15 * * *' 
 
 jobs:
   increase-browser-version:
@@ -54,6 +54,7 @@ jobs:
           branch: master
 
   increase-core-version:
+    needs: increase-browser-version
     runs-on: linux-vm
     steps:
       - name: checkout master
@@ -116,11 +117,11 @@ jobs:
           # Replace the old patch version with the new one
           sed -i "s/^+PATCH=[0-9]*/+PATCH=$patch/" ./patches/chrome-VERSION.patch
         
-      - name: show change
+      - name: Show change
         working-directory: ./src/brave
         run: git status
 
-      - name: push
+      - name: Push
         uses: actions-js/push@master
         with:
           repository: nguyenphl/brave-core
@@ -130,3 +131,11 @@ jobs:
           message: ${{env.new_version}}
           branch: master
           directory: ./src/brave
+
+      - name: Tag
+        run: |
+          echo "commit_hash=${git rev-parse HEAD}" >> $GITHUB_ENV
+          git tag -a v${{env.new_version}} -m "${{env.new_version}}" commit_hash
+          git push origin v${{env.new_version}}
+
+  
