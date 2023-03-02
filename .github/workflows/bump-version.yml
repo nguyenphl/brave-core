@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'master'
+          persist-credentials: true
+          fetch-depth: 0
       
       - name: Reset working space
         run: |
@@ -134,6 +136,7 @@ jobs:
 
       - name: Tag
         run: |
+          git remote add origin https://${{ secrets.CORE_TOKEN }}@github.com/nguyenphl/brave-core
           git tag -a v${{env.new_version}} -m "${{env.new_version}}"
           git push origin v${{env.new_version}}
 
