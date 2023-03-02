@@ -61,7 +61,7 @@ jobs:
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} 
+          github_token: ${{ secrets.CORE_TOKEN }} 
           author_email: herond-builds@herondlabs.org
           author_name: herond-builds
           message: ${{env.new_version}}
@@ -80,7 +80,7 @@ jobs:
         run: |
           if [ ! -d ./brave/.git ]
           then
-              git clone https://github.com/nguyenphl/brave-core ./brave
+              git clone https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/nguyenphl/brave-core ./brave
               cd brave
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
