@@ -20,8 +20,6 @@ jobs:
       - name: Install deps
         run: |
           npm i
-          cd ./src/brave
-          npm i
 
       - name: Sync
         run: npm run init
