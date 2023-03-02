@@ -21,6 +21,7 @@ jobs:
               git config --local --get remote.origin.url
               git checkout master
           else
+              git checkout master
               git pull origin
           fi
       
