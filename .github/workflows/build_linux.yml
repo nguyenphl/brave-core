@@ -1,0 +1,28 @@
+name: "Build Linux"
+
+on: 
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Bump Version"]
+    types:
+      - completed
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: linux-vm
+            arch: amd64
+        
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install deps
+        run: npm i
+
+      - name: Sync
+        run: npm run sync --init --sync_chromium false
+
+      - name: build
+        run: npm run build Release --target_arch=${{ matrix.arch }}
+
