@@ -85,6 +85,7 @@ jobs:
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
               git checkout master
+              git pull
           else
               cd brave
               git pull origin
@@ -153,7 +154,6 @@ jobs:
       - name: Tag
         run: |
           git remote set-url origin https://${{ secrets.CORE_TOKEN }}@github.com/nguyenphl/brave-core
-          git pull
           git tag -a v${{env.new_version}} HEAD~1 -m "v${{env.new_version}}"
           git push origin v${{env.new_version}}
 
