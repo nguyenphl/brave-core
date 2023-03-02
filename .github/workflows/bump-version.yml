@@ -13,8 +13,7 @@ jobs:
         run: |
           if [ ! -d ./brave-browser/.git ]
           then
-              git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/nguyenphl/brave-browser
-              git clone https://github.com/nguyenphl/brave-browser
+              git clone https://${GITHUB_USER}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}
               cd brave-browser
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
