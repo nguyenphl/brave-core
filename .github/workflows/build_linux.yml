@@ -24,8 +24,23 @@ jobs:
           npm i
 
       - name: Sync
-        run: npm run sync --init --sync_chromium false
+        run: npm run init
 
       - name: build
         run: npm run build Release --target_arch=${{ matrix.arch }}
+
+      - name: Release Binary to S3
+      - uses: actions/checkout@master
+        shell: bash
+        env:
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_KEY_ID }}
+          aws_s3_bucket: ${{ secrets.AWS_S3BUCKET_NAME }}
+        run: |
+          sudo apt-get update && sudo apt-get -y install awscli
+          aws configure set aws_access_key_id $aws_key_id
+          aws configure set aws_secret_access_key $aws_secret_access_key 
+          aws configure set default.region eu-central-1
+          aws s3 cp ./file1.json s3://$aws_s3_bucket/
+          aws s3 cp ./file2.json s3://$aws_s3_bucket/
 
