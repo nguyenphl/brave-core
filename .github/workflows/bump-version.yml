@@ -14,6 +14,10 @@ jobs:
         run: |
           if [ ! -d ./brave-browser/.git ]
           then
+              if [ ! -d ./brave-browser ]
+              then
+                rm -rf brave-browser
+              fi
               git clone https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
               cd brave-browser
               git config --global --add safe.directory .
