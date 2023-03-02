@@ -13,7 +13,7 @@ jobs:
         run: |
           if [ ! -d ./brave-browser/.git ]
           then
-              git clone https://${GITHUB_USER}:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
+              git clone https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
               cd brave-browser
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
