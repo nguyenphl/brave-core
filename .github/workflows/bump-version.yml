@@ -134,8 +134,7 @@ jobs:
 
       - name: Tag
         run: |
-          echo "commit_hash=${git rev-parse HEAD}" >> $GITHUB_ENV
-          git tag -a v${{env.new_version}} -m "${{env.new_version}}" commit_hash
+          git tag -a v${{env.new_version}} -m "${{env.new_version}}"
           git push origin v${{env.new_version}}
 
   
