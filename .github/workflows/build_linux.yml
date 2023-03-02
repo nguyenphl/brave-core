@@ -26,7 +26,7 @@ jobs:
         run: npm run init
 
       - name: build
-        run: npm run create_dist -- Release --target_arch=${{ matrix.arch }} --tag_ap=alpha 
+        run: npm run create_dist -- --target_arch=${{ matrix.arch }} --tag_ap=alpha 
 
       # - name: Release Binary to S3
       # - uses: actions/checkout@master
