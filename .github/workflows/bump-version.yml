@@ -14,7 +14,7 @@ jobs:
         run: |
           if [ ! -d ./brave-browser/.git ]
           then
-              if [ ! -d ./brave-browser ]
+              if [ -d ./brave-browser ]
               then
                 rm -rf brave-browser
               fi
