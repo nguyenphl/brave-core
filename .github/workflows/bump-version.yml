@@ -18,12 +18,15 @@ jobs:
               git clone https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
               cd brave-browser
               git remote set-url origin https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
+              echo ${GITHUB_REPOSITORY}
+              git fetch
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
               git checkout master
               git pull
           else
               git remote set-url origin https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
+              git fetch
               git checkout master
               git pull
           fi
@@ -150,7 +153,7 @@ jobs:
       - name: Tag
         run: |
           git remote set-url origin https://${{ secrets.CORE_TOKEN }}@github.com/nguyenphl/brave-core
-          git push origin
+          git pull
           git tag -a v${{env.new_version}} HEAD~1 -m "v${{env.new_version}}"
           git push origin v${{env.new_version}}
 
