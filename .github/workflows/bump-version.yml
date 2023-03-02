@@ -64,6 +64,10 @@ jobs:
           message: ${{env.new_version}}
           branch: master
 
+      - run: |
+          git remote set-url origin https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
+          git push origin
+
   increase-core-version:
     needs: increase-browser-version
     runs-on: linux-vm
@@ -146,6 +150,7 @@ jobs:
       - name: Tag
         run: |
           git remote set-url origin https://${{ secrets.CORE_TOKEN }}@github.com/nguyenphl/brave-core
+          git push origin
           git tag -a v${{env.new_version}} HEAD~1 -m "v${{env.new_version}}"
           git push origin v${{env.new_version}}
 
