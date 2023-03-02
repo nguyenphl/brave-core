@@ -10,14 +10,11 @@ jobs:
     runs-on: linux-vm
     steps:
       - name: checkout master
-        working-directory: ../../
         run: |
           if [ ! -d ./brave-browser/.git ]
           then
-              if [ -d ./brave-browser ]
-              then
-                rm -rf brave-browser
-              fi
+              cd ..
+              rm -rf brave-browser
               git clone https://nguyenphl:${{ secrets.CORE_TOKEN }}@github.com/${GITHUB_REPOSITORY}
               cd brave-browser
               git config --global --add safe.directory .
@@ -29,13 +26,11 @@ jobs:
           fi
       
       - name: Reset working space
-        working-directory: ../../brave-browser
         run: |
           git restore *
           git reset
 
       - name: Update version
-        working-directory: ../../brave-browser
         shell: bash
         run: |
           file_path="package.json"
@@ -55,18 +50,16 @@ jobs:
         run: echo ${{env.new_version}}
 
       - name: Show change
-        working-directory: ../../brave-browser
         run: git status
 
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
           author_email: herond-builds@herondlabs.org
           author_name: herond-builds
           message: ${{env.new_version}}
           branch: master
-          directory: ../../brave-browser
 
   increase-core-version:
     needs: increase-browser-version
