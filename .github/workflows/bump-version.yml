@@ -20,6 +20,7 @@ jobs:
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
               git checkout master
+              git pull origin
           else
               git checkout master
               git pull origin
