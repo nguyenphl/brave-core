@@ -146,7 +146,7 @@ jobs:
       - name: Tag
         run: |
           git remote set-url origin https://${{ secrets.CORE_TOKEN }}@github.com/nguyenphl/brave-core
-          git tag -a v${{env.new_version}} HEAD -m "v${{env.new_version}}"
+          git tag -a v${{env.new_version}} HEAD~1 -m "v${{env.new_version}}"
           git push origin v${{env.new_version}}
 
   
