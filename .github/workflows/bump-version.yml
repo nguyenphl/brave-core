@@ -132,6 +132,8 @@ jobs:
           message: ${{env.new_version}}
           branch: master
           directory: ./src/brave
+
+      - name: Tag
         run: |
           git remote set-url origin https://${{ secrets.CORE_TOKEN }}@github.com/nguyenphl/brave-core
           git tag -a v${{env.new_version}}
