@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: checkout master
         run: |
-          if [ ! -d ./brave-browser/.git ]
+          if [ ! -d ../brave-browser/.git ]
           then
               cd ..
               rm -rf brave-browser
