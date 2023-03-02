@@ -1,22 +1,5 @@
 name: "Build"
 
-# on: 
-#   push:
-#     branches: 
-#       - main
-#     paths-ignore:
-#       - '**/*.md'
-#       - '**/*.gitignore'
-#       - '**/*.gitattributes'
-  
-#   workflow_dispatch:
-#     branches:
-#       - main
-#     paths-ignore:
-#       - '**/*.md'
-#       - '**/*.gitignore'
-#       - '**/*.gitattributes'
-
 on: 
   workflow_dispatch:
   schedule:
@@ -26,22 +9,21 @@ jobs:
   increase-browser-version:
     runs-on: linux-vm
     steps:
-      - name: checkout master
+      - name: Checkout Master
         uses: actions/checkout@v3
         with:
           ref: 'master'
       
-      - name: reset working space
+      - name: Reset working space
         run: |
           git restore *
           git reset
           
-      - name: pull new source
+      - name: Pull new source
         run: git pull
 
-      - name: update version
+      - name: Update version
         shell: bash
-        id: update_version
         run: |
           file_path="package.json"
           version=$(jq -r '.version' $file_path)
@@ -56,10 +38,10 @@ jobs:
 
           echo "new_version=$new_version" >> $GITHUB_ENV
       
-      - name: updated to version ${{env.new_version}}
+      - name: Updated to version ${{env.new_version}}
         run: echo ${{env.new_version}}
 
-      - name: show change
+      - name: Show change
         run: git status
 
       - name: Commit & Push changes
@@ -72,43 +54,35 @@ jobs:
           branch: master
 
   increase-core-version:
-    needs: increase-browser-version
     runs-on: linux-vm
     steps:
-      # - name: init directory
-      #   run: mkdir -p ../../brave-core
-
       - name: checkout master
-        working-directory: ../../
+        working-directory: ./src/
         run: |
-          if [ ! -d ./brave-core/.git ]
+          if [ ! -d ./brave/.git ]
           then
-              git clone https://github.com/nguyenphl/brave-core 
-              cd brave-core
+              git clone https://github.com/nguyenphl/brave-core ./brave
+              cd brave
               git config --global --add safe.directory .
               git config --local --get remote.origin.url
               git checkout master
           else
-              cd brave-core
+              cd brave
               git pull origin
           fi
 
-      - name: reset working space
-        working-directory: ../../brave-core
+      - name: Reset working space
+        working-directory: ./src/brave
         run: |
           git restore *
           git reset
       
-      - name: pull new source
-        working-directory: ../../brave-core
+      - name: Pull new source
+        working-directory: ./src/brave
         run: git pull origin
 
-      - name: get current version
-        run: ls ../
-
-      - name: update version
-        working-directory: ../../brave-core
-        id: update_version
+      - name: Update version
+        working-directory: ./src/brave
         shell: bash
         run: |
           file_path="package.json"
@@ -124,11 +98,11 @@ jobs:
 
           echo "new_version=$new_version" >> $GITHUB_ENV
 
-      - name: updated to version ${{env.new_version}}
+      - name: Updated to version ${{env.new_version}}
         run: echo ${{env.new_version}}
 
-      - name: change chromium version
-        working-directory: ../../brave-core
+      - name: Change chromium version
+        working-directory: ./src/brave
         run: |
           # Read the current patch version from the patch file
           patch=$(grep "^+PATCH=" ./patches/chrome-VERSION.patch | cut -d "=" -f 2)
@@ -143,29 +117,10 @@ jobs:
           sed -i "s/^+PATCH=[0-9]*/+PATCH=$patch/" ./patches/chrome-VERSION.patch
         
       - name: show change
-        working-directory: ../../brave-core
+        working-directory: ./src/brave
         run: git status
 
-      # - name: set author
-      #   working-directory: ../../brave-core
-      #   run: |
-      #     git config --global user.email "herond-builds@herondlabs.org"
-      #     git config --global user.name "herond-builds"
-
-      # - name: add files
-      #   working-directory: ../../brave-core
-      #   run: |
-      #     git add .
-
-      # - name: commit
-      #   working-directory: ../../brave-core
-      #   run: |
-      #     git commit -m ${{env.new_version}}
-
       - name: push
-        # working-directory: ../../brave-core
-        # run: |
-        #   git push origin --verbose
         uses: actions-js/push@master
         with:
           repository: nguyenphl/brave-core
@@ -174,57 +129,4 @@ jobs:
           author_name: herond-builds
           message: ${{env.new_version}}
           branch: master
-          directory: ../../brave-core
-
-
-      
-
-  # build:
-  #   strategy:
-  #     # os: []
-  #     # arch: []
-  #     matrix:
-  #       include:
-  #         # - os: windows-vm
-  #         #   arch: ia32
-  #         # - os: windows-vm
-  #         #   arch: x64
-  #         - os: linux-vm
-  #           arch: amd64
-  #         # - os: linux-vm
-  #         #   arch: arm64
-  #         # - os: android-vm
-  #         #   arch: arm
-        
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - name: checkout master
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: 'master'
-
-  #     - name: pull new source
-  #       run: git pull
-
-  #     - name: install deps
-  #       run: npm i
-
-  #     - name: init
-  #       run: npm run init --target_arch=${{ matrix.arch }}
-
-  #     - name: build
-  #       run: npm run build Release --target_arch=${{ matrix.arch }}
-
-  # test:
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-
-  # create_dist:
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
+          directory: ./src/brave
